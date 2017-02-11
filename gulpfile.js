@@ -3,14 +3,11 @@ let gulp = require('gulp'),
     rollup = require('gulp-better-rollup'),
     babel = require('rollup-plugin-babel'),
     uglify = require('gulp-uglify'),
-    gulpIf = require('gulp-if'),
     jshint = require('gulp-jshint'),
-    sourcemaps = require('gulp-sourcemaps'),
     rename = require('gulp-rename'),
     runSequence = require('run-sequence'),
     del = require('del'),
-    pkg = require('./package.json'),
-    forProd = process.argv.includes('--prod');
+    pkg = require('./package.json');
 
 gulp.task('clean', () => {
     return del('dist');
