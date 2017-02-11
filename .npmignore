@@ -1,0 +1,11 @@
+# windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# misc
+*.html
+*.css
+.gitignore
+.editorconfig
+gulpfile.js
