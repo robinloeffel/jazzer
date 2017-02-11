@@ -1,6 +1,5 @@
 # jazzer
 [jazzer](https://robinloeffel.ch/jazzer) lets you easily freshen up your site and improve its memorability by _a bunch_. You know these short white flashes when changing between pages? Ugggh, right? jazzer fixes that. Install it, import it, configure it. Give your project the sexyness it deserves!
-![jazzer Demonstration](https://i.imgur.com/rtmKNsU.gif)
 
 ## How to Install
 You can install and use jazzer in one of two ways. Install it in a terminal with either yarn or npm and later import / require it somewhere along the line.
