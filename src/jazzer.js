@@ -85,58 +85,59 @@ const loadContent = (link) => {
 const updateDom = (newDom, link) => {
     // fetch the container on this dom and create a new document
     let containerNode = document.querySelector(container),
-        newDocument = document.implementation.createHTMLDocument();
+        newDocument = document.implementation.createHTMLDocument('');
 
     if (!containerNode) {
         throw new Error(`jazzer couldn't find any element matching the css selector "${container}".`);
     }
 
+    // hide the container
     containerNode.classList.toggle(changeClass);
 
-    // populate the new document with the dom (string) we got from ajax
+    // populate the new document with the dom (string) we got via ajax
     newDocument.body.insertAdjacentHTML('beforeend', newDom);
 
-    // get the markup of the container inside the new document and its title
-    let newMarkup = newDocument.querySelector(container).innerHTML,
-        newTitle = newDocument.title;
+    // get the markup of the container inside the new document
+    let newMarkup = newDocument.querySelector(container).innerHTML;
 
     // out with the old, in with the new markup
     setTimeout(() => {
         containerNode.innerHTML = newMarkup;
 
-        window.dispatchEvent(new Event('jazzerChanged'));
+        let jazzerChangedEvent = document.createEvent('Event');
+        jazzerChangedEvent.initEvent('jazzerChanged', true, true);
+        window.dispatchEvent(jazzerChangedEvent);
 
         fetchLinks();
     // duration + 5 so we're sure the transition is actually done before changing the content
     }, duration + 5);
 
+    // set the new title and add an entry to the browser history
     if (url) {
-        document.title = newTitle.replace('&mdash;', '—').replace('&ndash;', '–');
+        document.title = newDocument.body.innerHTML.match(/<title>(.*)<\/title>/)[1];
 
         history.pushState({path: link}, '', link);
     }
 };
 
 const showNode = () => {
+    // remove changeClass as soon as a new paint cycle starts
     setTimeout(() => {
-        // remove changeClass as soon as a new paint cycle starts
-        setTimeout(() => {
-            document.querySelector(container).classList.toggle(changeClass);
-        });
+        document.querySelector(container).classList.toggle(changeClass);
     });
 };
 
 window.addEventListener('popstate', (event) => {
-    // if theres no state prop on the event, go to index
-    let href = event.state ? event.state.path : window.location.origin;
-
-    loadContent(href);
+    // go to where the browser already changed the url to (last/next entry of history)
+    loadContent(location.href);
 });
 
 window.addEventListener('jazzerChanged', (event) => {
+    // check the dom for elements that might not have been loaded yet
     let blockers = document.querySelectorAll('img, picture, image, video, audio'),
         loaded = 0;
 
+    // show the new contents if all elements have fired a load event
     const checkLoaded = () => {
         loaded++;
 
@@ -145,6 +146,7 @@ window.addEventListener('jazzerChanged', (event) => {
         }
     };
 
+    // add a listener to the load event on each blocker or just show the new node if there are none
     if (blockers.length > 0) {
         for (let i = 0; i < blockers.length; i++) {
             blockers[i].addEventListener('load', checkLoaded);
