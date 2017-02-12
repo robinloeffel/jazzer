@@ -62,7 +62,7 @@ gulp.task('jshint', () => {
 });
 
 gulp.task('watch', () => {
-    gulp.watch(['./*.html', './*.css', 'src/*.js'], ['make']);
+    gulp.watch(['demo/*.html', 'demo/*.css', 'src/*.js'], ['make']);
     gulp.watch('src/*.js', ['jshint']);
 });
 
