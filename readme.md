@@ -1,4 +1,6 @@
 # jazzer
+[![jazzer on npm](https://img.shields.io/npm/v/jazzer.svg?style=flat-square)](https://www.npmjs.com/package/jazzer)
+
 [jazzer](https://robinloeffel.ch/jazzer) lets you easily freshen up your site and improve its memorability by _a bunch_. You know these short white flashes when changing between pages? Ugggh, right? jazzer fixes that. Install it, import it, configure it. Give your project the sexyness it deserves!
 
 ## How to Install
@@ -10,7 +12,7 @@ yarn add jazzer --save
 // your script
 import jazzer from 'jazzer';
 ```
-Or, if this whole node stuff just isn't your style, no worries. Download the latest release from here or reference it from some CDN and add it to your DOM in a script tag.
+Or, if this whole node stuff just isn't your style, no worries. Download the latest release from [here](https://github.com/rbnlffl/jazzer/releases/latest) or reference it from some CDN and add it to your DOM in a script tag.
 ```
 // your html
 <script src="jazzer.js"></script>
@@ -23,6 +25,24 @@ Setting up jazzer is _fast_. Whip this up somewhere in your code and you're almo
 jazzer();
 ```
 Now you need to add two things to your DOM: An element with the id `jazzer` and some links with the attribute `data-jazzer-trigger`. When clicking on `data-jazzer-trigger`, jazzer will look for the `href` attribute on the clicked link and load the contents of the HTML document laying there. If it could identify an element with the same id, in our case `jazzer`, in the loaded document, it will replace the contents of the `#jazzer` on this document with the contents of the `#jazzer` of the loaded document. That's how simple it is.
+
+A document body, ready to be manipulated by jazzer, looks something like this:
+```
+<body>
+    <header>
+        <a href="faq.html" data-jazzer-trigger>Imma trigger jazzer!</a>
+    </header>
+
+    <main id="jazzer">
+        <p>I will be replaced via AJAX! Whoop, whoop!</p>
+    </main>
+
+    <script src="jazzer.min.js"></script>
+    <script>
+        jazzer();
+    </script>
+</body>
+```
 
 ## Adding the jazz
 jazzer will apply a class of your choosing, or if you just roll with the defaults, `jazzer-changing` to your container `#jazzer`, while performing the AJAX request and changing the markup. This gives you full control over what should visually happen on your page, while everything gets loaded and injected in the background. The CSS of the [demo page](https://robinloeffel.ch/jazzer) looks like that:
@@ -49,7 +69,7 @@ jazzer({
     url: false // i don't want jazzer to change the url
 });
 ```
-When working with your own values, or in general, make sure to synchronize the `duration` property with the `transition-duration` of `changeClass`. As mentioned, you don't need to overwrite all of these. You can just modify the ones you want to change and leave the rest be. The defaults are:
+When working with your own values, or in general, make sure to synchronize the `duration` property with the `transition-duration` of `container`. As mentioned, you don't need to overwrite all of these. You can just modify the ones you want to change and leave the rest be. The defaults are:
 ```
 links = '[data-jazzer-trigger]';
 container = '#jazzer';
