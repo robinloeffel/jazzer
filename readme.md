@@ -78,6 +78,14 @@ duration = 500;
 url = true;
 ```
 
+## Brower Compatibility
+This package is functional on
+- Internet Explorer 11
+- Microsoft Edge
+- Google Chrome
+- Mozilla Firefox
+- Apple Safari (WebKit in general)
+
 ## Licence
 MIT
 
