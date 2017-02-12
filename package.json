@@ -9,6 +9,12 @@
     "module": "dist/jazzer.es6.js",
     "main": "dist/jazzer.umd.js",
     "browser": "dist/jazzer.js",
+    "keywords": [
+        "smooth",
+        "ajax",
+        "page",
+        "transition"
+    ],
     "devDependencies": {
         "babel-preset-es2015-rollup": "^3.0.0",
         "del": "^2.2.2",
@@ -26,6 +32,7 @@
     "scripts": {
         "start": "gulp",
         "make": "gulp clean && gulp jshint && gulp make && gulp uglify",
+        "demo": "gulp clean && gulp make && gulp serve",
         "prepublish": "yarn run make"
     }
 }
