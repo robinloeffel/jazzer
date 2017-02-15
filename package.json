@@ -6,7 +6,7 @@
     "repository": "rbnlffl/jazzer",
     "author": "Robin Löffel <hi@robinloeffel.ch> (https://robinloeffel.ch)",
     "homepage": "https://robinloeffel.ch/jazzer",
-    "module": "dist/jazzer.es6.js",
+    "module": "dist/jazzer.es.js",
     "main": "dist/jazzer.umd.js",
     "browser": "dist/jazzer.js",
     "keywords": [
