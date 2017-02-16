@@ -37,15 +37,16 @@ const jazzer = (settings = {}) => {
     url = settings.url || true;
 
     containerNode = document.querySelector(container);
-    linkNodes = document.querySelectorAll(links);
 
     refreshEventListeners();
 };
 
 const refreshEventListeners = () => {
     // remove the listeners of the old linkNodes
-    for (let i = 0; i < linkNodes.length; i++) {
-        linkNodes[i].removeEventListener('click', loadPage);
+    if (linkNodes) {
+        for (let i = 0; i < linkNodes.length; i++) {
+            linkNodes[i].removeEventListener('click', loadContent);
+        }
     }
 
     linkNodes = document.querySelectorAll(links);
@@ -56,19 +57,15 @@ const refreshEventListeners = () => {
 
     // set the listeners of the new linkNodes
     for (let i = 0; i < linkNodes.length; i++) {
-        linkNodes[i].addEventListener('click', loadPage);
+        linkNodes[i].addEventListener('click', loadContent);
     }
 };
 
-const loadPage = (event) => {
-    // prevent regular state change
+const loadContent = (event) => {
     event.preventDefault();
 
-    loadContent(event.currentTarget.href);
-};
-
-const loadContent = (url) => {
-    let request = new XMLHttpRequest();
+    let request = new XMLHttpRequest(),
+        url = event.currentTarget.href;
 
     request.addEventListener('readystatechange', () => {
         if (request.readyState === 4) {
@@ -86,7 +83,7 @@ const loadContent = (url) => {
 };
 
 const updateDom = (newDom, url) => {
-    // fetch the container on this dom and create a new document
+    // create a new document object
     let newDocument = document.implementation.createHTMLDocument('');
 
     if (!containerNode) {
@@ -96,20 +93,21 @@ const updateDom = (newDom, url) => {
     // hide the container
     containerNode.classList.add(changeClass);
 
-    // populate the new document with the dom (string) we got via ajax
-    newDocument.open();
-    newDocument.write(newDom);
-    newDocument.close();
-
-    // get the markup of the container inside the new document
-    let newMarkup = newDocument.querySelector(container).innerHTML;
-
-    // out with the old, in with the new markup
     setTimeout(() => {
+        // populate the new document with the dom from ajax
+        newDocument.open();
+        newDocument.write(newDom);
+        newDocument.close();
+
+        // get the markup of the container inside the new document
+        let newMarkup = newDocument.querySelector(container).innerHTML;
+
+        // out with the old, in with the new markup
         containerNode.innerHTML = newMarkup;
 
         refreshEventListeners();
 
+        // emit jazzerChanged event
         let jazzerChangedEvent = document.createEvent('Event');
         jazzerChangedEvent.initEvent('jazzerChanged', true, true);
         window.dispatchEvent(jazzerChangedEvent);
@@ -138,7 +136,7 @@ window.addEventListener('popstate', (event) => {
 
 window.addEventListener('jazzerChanged', (event) => {
     // check the dom for elements that might not have been loaded yet
-    let blockers = document.querySelectorAll('img, picture, image, video, audio'),
+    let blockers = containerNode.querySelectorAll('img, picture, image, video, audio'),
         loaded = 0;
 
     // show the new contents if all elements have fired a load event
