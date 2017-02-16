@@ -83,27 +83,30 @@ const loadContent = (event) => {
 };
 
 const updateDom = (newDom, url) => {
-    // create a new document object
-    let newDocument = document.implementation.createHTMLDocument('');
-
-    if (!containerNode) {
-        throw new Error(`jazzer couldn't find any element matching the css selector "${container}".`);
-    }
-
     // hide the container
     containerNode.classList.add(changeClass);
 
     setTimeout(() => {
+        // create a new document object
+        let newDocument = document.implementation.createHTMLDocument('');
+
+        if (!containerNode) {
+            throw new Error(`jazzer couldn't find any element matching the css selector "${container}".`);
+        }
+
         // populate the new document with the dom from ajax
         newDocument.open();
         newDocument.write(newDom);
         newDocument.close();
 
-        // get the markup of the container inside the new document
-        let newMarkup = newDocument.querySelector(container).innerHTML;
-
         // out with the old, in with the new markup
-        containerNode.innerHTML = newMarkup;
+        containerNode.innerHTML = newDocument.querySelector(container).innerHTML;
+
+        // set the new title and add an entry to the browser history
+        if (url) {
+            document.title = newDocument.title;
+            history.pushState({path: url}, '', url);
+        }
 
         refreshEventListeners();
 
@@ -111,15 +114,8 @@ const updateDom = (newDom, url) => {
         let jazzerChangedEvent = document.createEvent('Event');
         jazzerChangedEvent.initEvent('jazzerChanged', true, true);
         window.dispatchEvent(jazzerChangedEvent);
-    // duration + 5 so we're sure the transition is actually done before changing the content
+    // duration + 5 so the transition is actually done before changing the content
     }, duration + 5);
-
-    // set the new title and add an entry to the browser history
-    if (url) {
-        document.title = newDocument.title;
-
-        history.pushState({path: url}, '', url);
-    }
 };
 
 const showNode = () => {
@@ -135,7 +131,7 @@ window.addEventListener('popstate', (event) => {
 });
 
 window.addEventListener('jazzerChanged', (event) => {
-    // check the dom for elements that might not have been loaded yet
+    // check the container for elements that might not have been loaded yet
     let blockers = containerNode.querySelectorAll('img, picture, image, video, audio'),
         loaded = 0;
 
