@@ -1,7 +1,7 @@
 {
     "name": "jazzer",
     "description": "Add some visual smooth jazz to your page transitions",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "license": "MIT",
     "repository": "rbnlffl/jazzer",
     "author": "Robin Löffel <hi@robinloeffel.ch> (https://robinloeffel.ch)",
