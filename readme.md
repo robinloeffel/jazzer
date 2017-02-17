@@ -1,7 +1,7 @@
 # jazzer
 [![jazzer on npm](https://img.shields.io/npm/v/jazzer.svg?style=flat-square)](https://www.npmjs.com/package/jazzer)
 
-[jazzer](https://robinloeffel.ch/jazzer) lets you easily freshen up your site and improve its memorability by _a bunch_. You know these short white flashes when changing between pages? Ugggh, right? jazzer fixes that. Install it, import it, configure it. Give your project the sexyness it deserves!
+[jazzer](https://robinloeffel.ch/jazzer) lets you easily freshen up your site and improve its memorability by _a bunch_. You know these short white flashes when changing between pages? Ugggh, right? jazzer fixes that. It lets you control exactly what should visually happen when clicking on an internal link. Install it, import it, configure it. Give your project the sexyness it deserves!
 
 ## How to Install
 You can install and use jazzer in one of two ways. Install it in a terminal with either yarn or npm and later import / require it somewhere along the line.
@@ -44,7 +44,7 @@ A document body, ready to be manipulated by jazzer, looks something like this:
 </body>
 ```
 
-## Adding the jazz
+## Adding the Jazz
 jazzer will apply a class of your choosing, or if you just roll with the defaults, `jazzer-changing` to your container `#jazzer`, while performing the AJAX request and changing the markup. This gives you full control over what should visually happen on your page, while everything gets loaded and injected in the background. The CSS of the [demo page](https://robinloeffel.ch/jazzer) looks like that:
 ```
 #jazzer {
@@ -58,7 +58,7 @@ jazzer will apply a class of your choosing, or if you just roll with the default
 }
 ```
 
-## Custom settings
+## Custom Settings
 Of course you can configure jazzer to float your boat if you're not content with the defaults. The configurable values are `links`, `container`, `changeClass`, `duration` and `url`. You can give jazzer an object with (some of) these properties when calling it. Here's an example:
 ```
 jazzer({
@@ -78,7 +78,7 @@ duration = 500;
 url = true;
 ```
 
-## Brower Compatibility
+## Browser Compatibility
 This package is functional on
 - Internet Explorer 11
 - Microsoft Edge
