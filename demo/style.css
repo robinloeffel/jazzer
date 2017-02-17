@@ -64,7 +64,7 @@ code {
     display: block;
     font-family: 'Roboto Mono', sans-serif;
     font-size: .8rem;
-    padding: 0 0 0 35px;
+    padding: 10px 0 10px 35px;
     border-left: 2px solid rgb(184, 49, 27);
 }
 
