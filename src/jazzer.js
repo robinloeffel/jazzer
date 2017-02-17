@@ -52,7 +52,7 @@ const setLinkListeners = () => {
     linkNodes = document.querySelectorAll(links);
 
     if (linkNodes.length === 0) {
-        throw new Error(`jazzer couldn't find a§ny links matching the css selector "${links}".`);
+        throw new Error(`jazzer couldn't find any links matching the css selector "${links}".`);
     }
 
     // set the listeners of the new linkNodes
