@@ -5,13 +5,13 @@
     container       // (string)     css selector by which the container will be identified, should be uniqe
                     //              defaults to '#jazzer'
 
-    changeClass     // (string)     css class to apply during the dom change
+    transitionClass // (string)     css class to apply during the dom change
                     //              defaults to 'jazzer-changing'
 
     duration        // (int)        duration of the dom change transition in ms
                     //              defaults to 500
 
-    url             // (bool)       if the url should be changed or not
+    changeUrl       // (bool)       if the url and title should be changed or not
                     //              defaults to true
 
     linkNodes       // (NodeList)   link elements that trigger jazzer on click
@@ -23,18 +23,18 @@
 
 let links,
     container,
-    changeClass,
+    transitionClass,
     duration,
-    url,
+    changeUrl,
     linkNodes,
     containerNode;
 
 const jazzer = (settings = {}) => {
     links = settings.links || '[data-jazzer-trigger]';
     container = settings.container || '#jazzer';
-    changeClass = settings.changeClass || 'jazzer-changing';
+    transitionClass = settings.transitionClass || 'jazzer-changing';
     duration = settings.duration || 500;
-    url = settings.url || true;
+    changeUrl = settings.changeUrl || true;
 
     containerNode = document.querySelector(container);
 
@@ -87,7 +87,7 @@ const loadContent = (event) => {
 
 const updateDom = (newDom, eventType, href) => {
     // hide the container
-    containerNode.classList.add(changeClass);
+    containerNode.classList.add(transitionClass);
 
     setTimeout(() => {
         // create a new document object
@@ -98,15 +98,13 @@ const updateDom = (newDom, eventType, href) => {
         }
 
         // populate the new document with the dom from ajax
-        newDocument.open();
-        newDocument.write(newDom);
-        newDocument.close();
+        newDocument.documentElement.innerHTML = newDom;
 
         // out with the old, in with the new markup
         containerNode.innerHTML = newDocument.querySelector(container).innerHTML;
 
         // set the new title and add an entry to the browser history
-        if (url) {
+        if (changeUrl) {
             document.title = newDocument.title;
 
             if (eventType === 'click') {
@@ -158,7 +156,7 @@ window.addEventListener('jazzerChanged', (event) => {
 });
 
 window.addEventListener('jazzerDone', () => {
-    containerNode.classList.remove(changeClass);
+    containerNode.classList.remove(transitionClass);
 });
 
 export default jazzer;
