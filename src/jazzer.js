@@ -38,10 +38,10 @@ const jazzer = (settings = {}) => {
 
     containerNode = document.querySelector(container);
 
-    refreshEventListeners();
+    setLinkListeners();
 };
 
-const refreshEventListeners = () => {
+const setLinkListeners = () => {
     // remove the listeners of the old linkNodes
     if (linkNodes) {
         for (let i = 0; i < linkNodes.length; i++) {
@@ -52,7 +52,7 @@ const refreshEventListeners = () => {
     linkNodes = document.querySelectorAll(links);
 
     if (linkNodes.length === 0) {
-        throw new Error(`jazzer couldn't find any links matching the css selector "${links}".`);
+        throw new Error(`jazzer couldn't find a§ny links matching the css selector "${links}".`);
     }
 
     // set the listeners of the new linkNodes
@@ -65,24 +65,27 @@ const loadContent = (event) => {
     event.preventDefault();
 
     let request = new XMLHttpRequest(),
-        url = event.currentTarget.href;
+        // if there is event.state, use its path property (popstate not to root)
+        // if there isn't one, fall back to currentTarget.href (click on a linkNode)
+        // if there is no currentTarget, fall back to the location.href (popstate to root)
+        href = event.state ? event.state.path : event.currentTarget.href || location.href;
 
     request.addEventListener('readystatechange', () => {
         if (request.readyState === 4) {
-            // call updateDom() when the request has been successfully processed, else throw an error
+            // call updateDom() when the request has been successfully processed or throw an error
             if (request.status === 200) {
-                updateDom(request.responseText, url);
+                updateDom(request.responseText, event.type, href);
             } else {
-                throw new Error(`jazzer couldn't get "${url}", the server responded with "${request.status} ${request.statusText}".`);
+                throw new Error(`jazzer couldn't get "${href}", the server responded with "${request.status} ${request.statusText}".`);
             }
         }
     });
 
-    request.open('get', url, true);
+    request.open('get', href, true);
     request.send();
 };
 
-const updateDom = (newDom, url) => {
+const updateDom = (newDom, eventType, href) => {
     // hide the container
     containerNode.classList.add(changeClass);
 
@@ -105,53 +108,57 @@ const updateDom = (newDom, url) => {
         // set the new title and add an entry to the browser history
         if (url) {
             document.title = newDocument.title;
-            history.pushState({path: url}, '', url);
+
+            if (eventType === 'click') {
+                history.pushState({
+                    path: href,
+                }, newDocument.title, href);
+            }
         }
 
-        refreshEventListeners();
+        setLinkListeners();
 
-        // emit jazzerChanged event
-        let jazzerChangedEvent = document.createEvent('Event');
-        jazzerChangedEvent.initEvent('jazzerChanged', true, true);
-        window.dispatchEvent(jazzerChangedEvent);
+        emitCustomEvent('jazzerChanged');
     // duration + 5 so the transition is actually done before changing the content
     }, duration + 5);
 };
 
-const showNode = () => {
-    // remove changeClass as soon as a new paint cycle starts
-    setTimeout(() => {
-        containerNode.classList.remove(changeClass);
-    });
+const emitCustomEvent = (name) => {
+    // create and dispatch an event with a given name
+    let customEvent = document.createEvent('Event');
+    customEvent.initEvent(name, true, true);
+    document.dispatchEvent(customEvent);
 };
 
 window.addEventListener('popstate', (event) => {
-    // go to where the browser already changed the url to (last/next entry of history)
-    loadContent(location.href);
+    loadContent(event);
 });
 
 window.addEventListener('jazzerChanged', (event) => {
     // check the container for elements that might not have been loaded yet
-    let blockers = containerNode.querySelectorAll('img, picture, image, video, audio'),
-        loaded = 0;
+    let blockers = containerNode.querySelectorAll('img, picture, image, video, audio, script, style'),
+        toLoad = blockers.length;
 
-    // show the new contents if all elements have fired a load event
-    const checkLoaded = () => {
-        loaded++;
+    // show the new contents if all blockers have fired a load event
+    const blockerLoaded = () => {
+        toLoad--;
 
-        if (loaded === blockers.length) {
-            showNode();
+        if (toLoad === 0) {
+            emitCustomEvent('jazzerDone');
         }
     };
 
-    // add a listener to the load event on each blocker or just show the new node if there are none
-    if (blockers.length > 0) {
-        for (let i = 0; i < blockers.length; i++) {
-            blockers[i].addEventListener('load', checkLoaded);
-        }
+    if (toLoad === 0) {
+        emitCustomEvent('jazzerDone');
     } else {
-        showNode();
+        for (let i = 0; i < blockers.length; i++) {
+            blockers[i].addEventListener('load', blockerLoaded);
+        }
     }
+});
+
+window.addEventListener('jazzerDone', () => {
+    containerNode.classList.remove(changeClass);
 });
 
 export default jazzer;
