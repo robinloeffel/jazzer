@@ -8,7 +8,7 @@ You can install and use jazzer in one of two ways. Install it in a terminal with
 
 ```javascript
 // your terminal
-yarn add jazzer --save
+yarn add jazzer
 
 // your script
 import jazzer from 'jazzer';
@@ -36,11 +36,11 @@ A document body, ready to be manipulated by jazzer, looks something like this:
 ```html
 <body>
     <header>
-        <a href="faq.html" data-jazzer-trigger>Imma trigger jazzer!</a>
+        <a href="faq.html" data-jazzer-trigger>I'll trigger jazzer!</a>
     </header>
 
     <main id="jazzer">
-        <p>I will be replaced via AJAX! Whoop, whoop!</p>
+        <p>I will be replaced via AJAX!</p>
     </main>
 
     <script src="jazzer.min.js"></script>
@@ -60,7 +60,7 @@ jazzer will apply a class of your choosing, or if you just roll with the default
 
 .jazzer-changing {
     opacity: 0;
-    transform: scale(.75) translateY(100px);
+    transform: scale(.75);
     pointer-events: none;
 }
 ```
