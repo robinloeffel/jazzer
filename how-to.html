@@ -1,0 +1,66 @@
+<!doctype html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>jazzer Demo &mdash; Page 1</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fascinate">
+        <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" href="favicon.png">
+    </head>
+    <body>
+        <main>
+            <h1 class="site-heading">jazzer</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="index.html" data-jazzer-trigger>Home</a>
+                    </li>
+                    <li>
+                        <a href="how-to.html" data-jazzer-trigger>How to Use</a>
+                    </li>
+                    <li>
+                        <a href="customize.html" data-jazzer-trigger>Advanced Stuff</a>
+                    </li>
+                </ul>
+            </nav>
+            <article id="jazzer">
+                <h2>How to Use</h2>
+                <code>
+                    <span class="comment">// terminal</span><br>
+                    yarn add jazzer<br><br>
+    
+                    <span class="comment">// script.js</span><br>
+                    import jazzer from 'jazzer';<br><br>
+    
+                    jazzer();<br><br>
+    
+                    <span class="comment">// style.css</span><br>
+                    #jazzer {<br>
+                    &emsp;&emsp;transition: transform .5s, opacity .5s;<br>
+                    }<br><br>
+    
+                    .jazzer-changing {<br>
+                    &emsp;&emsp;opacity: 0;<br>
+                    &emsp;&emsp;transform: scale(.9);<br>
+                    &emsp;&emsp;pointer-events: none;<br>
+                    }<br><br>
+    
+                    <span class="comment">// index.html</span><br>
+                    &lt;a href="some-page.html" data-jazzer-trigger&gt;<br>
+                    &emsp;&emsp;I trigger jazzer<br>
+                    &lt;/a&gt;<br><br>
+    
+                    &lt;div id="jazzer"&gt;<br>
+                    &emsp;&emsp;My contents will super-smoothly change<br>
+                    &lt;/div&gt;
+                </code>
+                <a href="customize.html" data-jazzer-trigger>You can even customize jazzer!</a>
+            </article>
+        </main>
+        <script src="jazzer.min.js" charset="utf-8"></script>
+        <script>
+            jazzer();
+        </script>
+    </body>
+</html>
