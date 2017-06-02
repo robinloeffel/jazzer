@@ -1,7 +1,7 @@
 {
     "name": "jazzer",
     "description": "Add some visual smooth jazz to your page transitions",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "license": "MIT",
     "repository": "rbnlffl/jazzer",
     "author": "Robin Löffel <hi@robinloeffel.ch> (https://robinloeffel.ch)",
@@ -16,14 +16,14 @@
         "transition"
     ],
     "devDependencies": {
-        "babel-preset-es2015-rollup": "^3.0.0",
+        "babel-preset-env": "^1.5.1",
         "del": "^2.2.2",
         "gulp": "^3.9.1",
-        "gulp-better-rollup": "^1.0.2",
+        "gulp-better-rollup": "^1.1.1",
         "gulp-connect": "^5.0.0",
         "gulp-jshint": "^2.0.4",
         "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^2.0.1",
+        "gulp-uglify": "^3.0.0",
         "jshint": "^2.9.4",
         "jshint-stylish": "^2.2.1",
         "rollup-plugin-babel": "^2.7.1",
