@@ -1,70 +1,45 @@
-const gulp = require('gulp'),
-    connect = require('gulp-connect'),
-    rollup = require('gulp-better-rollup'),
-    babel = require('rollup-plugin-babel'),
-    uglify = require('gulp-uglify'),
-    jshint = require('gulp-jshint'),
-    rename = require('gulp-rename'),
-    runSequence = require('run-sequence'),
-    del = require('del'),
-    pkg = require('./package.json'),
-    paths = require('./config/paths'),
-    babelCfg = require('./config/babel.config'),
-    connectCfg = require('./config/connect.config');
+const gulp = require('gulp');
+const connect = require('gulp-connect');
+const betterRollup = require('gulp-better-rollup');
+const rollupBabel = require('rollup-plugin-babel');
+const runSequence = require('run-sequence');
+const del = require('del');
+const pkg = require('./package.json');
 
-gulp.task('clean', () => del(paths.dist.root));
-
-gulp.task('serve', () => connect.server(connectCfg));
+gulp.task('clean', () => del('dist'));
 
 gulp.task('make', () => {
-    return gulp.src(paths.src.index)
-        .pipe(rollup({
+    return gulp.src('src/jazzer.js')
+        .pipe(betterRollup({
             plugins: [
-                babel(babelCfg)
+                rollupBabel({
+                    presets: [
+                        ['@babel/preset-env', {
+                            targets: {
+                                ie: 11,
+                                browsers: 'last 2 versions'
+                            },
+                            useBuiltIns: 'usage',
+                            modules: false,
+                            debug: true
+                        }]
+                    ],
+                    ignore: ['node_modules']
+                })
             ]
         }, [{
-            dest: pkg.main,
-            format: 'umd'
-        }, {
-            dest: pkg.module,
+            file: pkg.module,
             format: 'es'
         }, {
-            dest: pkg.browser,
+            file: pkg.browser,
             format: 'iife'
+        }, {
+            file: pkg.main,
+            format: 'cjs'
         }]))
-        .pipe(gulp.dest(paths.dist.root))
-        .pipe(connect.reload());
+        .pipe(gulp.dest('dist'));
 });
 
-gulp.task('uglify', () => {
-    return gulp.src(paths.dist.index)
-        .pipe(uglify())
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(gulp.dest(paths.dist.root));
+gulp.task('default', callback => {
+    runSequence('clean', 'make', callback);
 });
-
-gulp.task('jshint', () => {
-    return gulp.src(paths.src.index)
-        .pipe(jshint({
-            esversion: 6,
-            node: true,
-            browser: true,
-            eqeqeq: true,
-            latedef: true,
-            undef: true,
-            unused: true,
-            varstmt: true,
-            module: true,
-            strict: true
-        }))
-        .pipe(jshint.reporter('jshint-stylish'));
-});
-
-gulp.task('watch', () => {
-    gulp.watch(paths.demo, ['make']);
-    gulp.watch(paths.src.js, ['jshint']);
-});
-
-gulp.task('default', cb => runSequence('clean', 'jshint', 'make', 'uglify', 'serve', 'watch', cb));

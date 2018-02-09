@@ -1,13 +1,13 @@
 {
     "name": "jazzer",
-    "description": "Add some visual smooth jazz to your page transitions",
-    "version": "0.0.6",
+    "description": "Add some visual smooth jazz to your page.",
+    "version": "0.1.0",
     "license": "MIT",
     "repository": "rbnlffl/jazzer",
     "author": "Robin Löffel <hi@robinloeffel.ch> (https://robinloeffel.ch)",
     "homepage": "https://robinloeffel.ch/jazzer",
     "module": "dist/jazzer.es.js",
-    "main": "dist/jazzer.umd.js",
+    "main": "dist/jazzer.cjs.js",
     "browser": "dist/jazzer.js",
     "keywords": [
         "smooth",
@@ -16,23 +16,16 @@
         "transition"
     ],
     "devDependencies": {
-        "babel-preset-env": "^1.5.1",
-        "del": "^2.2.2",
+        "@babel/core": "^7.0.0-beta.39",
+        "@babel/polyfill": "^7.0.0-beta.39",
+        "@babel/preset-env": "^7.0.0-beta.39",
+        "del": "^3.0.0",
         "gulp": "^3.9.1",
-        "gulp-better-rollup": "^1.1.1",
-        "gulp-connect": "^5.0.0",
-        "gulp-jshint": "^2.0.4",
-        "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^3.0.0",
-        "jshint": "^2.9.4",
-        "jshint-stylish": "^2.2.1",
-        "rollup-plugin-babel": "^2.7.1",
-        "run-sequence": "^1.2.2"
+        "gulp-better-rollup": "^3.0.0",
+        "rollup-plugin-babel": "^4.0.0-beta.0",
+        "run-sequence": "^2.2.1"
     },
     "scripts": {
-        "start": "gulp",
-        "make": "gulp clean && gulp jshint && gulp make && gulp uglify",
-        "demo": "gulp clean && gulp make && gulp serve",
-        "prepublish": "yarn run make"
+        "make": "gulp"
     }
 }
