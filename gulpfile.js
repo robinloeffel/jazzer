@@ -1,5 +1,4 @@
 const gulp = require('gulp');
-const connect = require('gulp-connect');
 const betterRollup = require('gulp-better-rollup');
 const rollupBabel = require('rollup-plugin-babel');
 const runSequence = require('run-sequence');
