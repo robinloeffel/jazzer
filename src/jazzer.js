@@ -1,65 +1,44 @@
-/*
-    links           // (string)     css selector by which the links triggering smoothLoad will be fetched
-                    //              defaults to '[data-jazzer-trigger]'
+class Jazzer {
+    constructor(triggersSelector = '[data-jazzer-trigger]', containerSelector = '#jazzer', transitionClass = 'jazzer-changing', transitionDuration = 500, url = true) {
+        this.selectors = {};
+        this.transition = {};
+        this.nodes = {};
 
-    container       // (string)     css selector by which the container will be identified, should be uniqe
-                    //              defaults to '#jazzer'
+        this.selectors.triggers = triggersSelector;
+        this.selectors.container = containerSelector;
 
-    transitionClass // (string)     css class to apply during the dom change
-                    //              defaults to 'jazzer-changing'
+        this.transition.class = transitionClass;
+        this.transition.duration = transitionDuration;
 
-    duration        // (int)        duration of the dom change transition in ms
-                    //              defaults to 500
+        this.nodes.triggers = document.querySelectorAll(this.selectors.triggers);
+        this.nodes.container = document.querySelector(this.selectors.container);
 
-    changeUrl       // (bool)       if the url and title should be changed or not
-                    //              defaults to true
+        this.url = url;
 
-    linkNodes       // (NodeList)   link elements that trigger jazzer on click
-                    //              will be populated by getLinks()
-
-    containerNode   // (node)       dom element of which the contents will be changed
-                    //              will be defined when calling jazzer()
-*/
-
-let links,
-    container,
-    transitionClass,
-    duration,
-    changeUrl,
-    linkNodes,
-    containerNode;
-
-const jazzer = (settings = {}) => {
-    links = settings.links || '[data-jazzer-trigger]';
-    container = settings.container || '#jazzer';
-    transitionClass = settings.transitionClass || 'jazzer-changing';
-    duration = settings.duration || 500;
-    changeUrl = settings.changeUrl || true;
-
-    containerNode = document.querySelector(container);
-
-    setLinkListeners();
-};
-
-const setLinkListeners = () => {
-    // remove the listeners of the old linkNodes
-    if (linkNodes) {
-        for (let i = 0; i < linkNodes.length; i++) {
-            linkNodes[i].removeEventListener('click', loadContent);
-        }
+        this.setListeners();
     }
 
-    linkNodes = document.querySelectorAll(links);
-
-    if (linkNodes.length === 0) {
-        throw new Error(`jazzer couldn't find any links matching the css selector "${links}".`);
+    setListeners() {
+        Array.from(this.nodes.triggers).forEach(trigger => {
+            trigger.addEventListener('click', this.loadContent);
+        });
     }
 
-    // set the listeners of the new linkNodes
-    for (let i = 0; i < linkNodes.length; i++) {
-        linkNodes[i].addEventListener('click', loadContent);
+    async loadContent(event) {
+        event.preventDefault();
+
+        const href = event.state ? event.state.path : event.currentTarget.href || location.href;
+
+        const req = await fetch(href);
+        const res = await req.json();
+
+        console.log(res);
     }
-};
+}
+
+const jazzer = config => new Jazzer(config);
+
+export default jazzer;
 
 const loadContent = (event) => {
     event.preventDefault();
@@ -159,4 +138,4 @@ window.addEventListener('jazzerDone', () => {
     containerNode.classList.remove(transitionClass);
 });
 
-export default jazzer;
+// export default jazzer;

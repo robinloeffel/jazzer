@@ -1,6 +1,8 @@
 const gulp = require('gulp');
 const rollupBabel = require('rollup-plugin-babel');
 const rollupUglify = require('rollup-plugin-uglify');
+const rollupNodeResolve = require('rollup-plugin-node-resolve');
+const rollupCommonJs = require('rollup-plugin-commonjs');
 const del = require('del');
 const rollupStream = require('rollup-stream');
 const rollup = require('rollup');
@@ -19,6 +21,7 @@ const config = {
                    ie: 11,
                    browsers: 'last 2 versions'
                },
+               useBuiltIns: 'usage',
                modules: false,
                debug: true
            }]
@@ -37,6 +40,8 @@ gulp.task('make:iife', () => {
             name: 'jazzer'
         },
         plugins: [
+            rollupNodeResolve(),
+            rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
@@ -53,6 +58,8 @@ gulp.task('make:iife:min', () => {
             name: 'jazzer'
         },
         plugins: [
+            rollupNodeResolve(),
+            rollupCommonJs(),
             rollupBabel(config.babel),
             rollupUglify()
         ],
@@ -69,6 +76,8 @@ gulp.task('make:es', () => {
             format: 'es',
         },
         plugins: [
+            rollupNodeResolve(),
+            rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
@@ -84,6 +93,8 @@ gulp.task('make:cjs', () => {
             format: 'cjs',
         },
         plugins: [
+            rollupNodeResolve(),
+            rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
