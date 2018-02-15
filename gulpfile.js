@@ -1,5 +1,6 @@
 const gulp = require('gulp');
 const rollupBabel = require('rollup-plugin-babel');
+const rollupUglify = require('rollup-plugin-uglify');
 const del = require('del');
 const rollupStream = require('rollup-stream');
 const rollup = require('rollup');
@@ -18,7 +19,6 @@ const config = {
                    ie: 11,
                    browsers: 'last 2 versions'
                },
-               useBuiltIns: 'usage',
                modules: false,
                debug: true
            }]
@@ -29,18 +29,68 @@ const config = {
 
 gulp.task('clean', () => del(config.paths.dist));
 
-gulp.task('make', () => {
+gulp.task('make:iife', () => {
     return rollupStream({
         input: config.paths.index,
+        output: {
+            format: 'iife',
+            name: 'jazzer'
+        },
         plugins: [
             rollupBabel(config.babel)
         ],
-        rollup: rollup,
-        format: 'iife',
-        name: 'jazzer'
+        rollup: rollup
     })
     .pipe(source('jazzer.js'))
     .pipe(gulp.dest(config.paths.dist));
 });
 
+gulp.task('make:iife:min', () => {
+    return rollupStream({
+        input: config.paths.index,
+        output: {
+            format: 'iife',
+            name: 'jazzer'
+        },
+        plugins: [
+            rollupBabel(config.babel),
+            rollupUglify()
+        ],
+        rollup: rollup
+    })
+    .pipe(source('jazzer.min.js'))
+    .pipe(gulp.dest(config.paths.dist));
+});
+
+gulp.task('make:es', () => {
+    return rollupStream({
+        input: config.paths.index,
+        output: {
+            format: 'es',
+        },
+        plugins: [
+            rollupBabel(config.babel)
+        ],
+        rollup: rollup
+    })
+    .pipe(source('jazzer.es.js'))
+    .pipe(gulp.dest(config.paths.dist));
+});
+
+gulp.task('make:cjs', () => {
+    return rollupStream({
+        input: config.paths.index,
+        output: {
+            format: 'cjs',
+        },
+        plugins: [
+            rollupBabel(config.babel)
+        ],
+        rollup: rollup
+    })
+    .pipe(source('jazzer.cjs.js'))
+    .pipe(gulp.dest(config.paths.dist));
+});
+
+gulp.task('make', gulp.parallel('make:iife', 'make:iife:min', 'make:es', 'make:cjs'));
 gulp.task('default', gulp.series('clean', 'make'));
