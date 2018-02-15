@@ -23,13 +23,7 @@ var jazzer = (function () {
     containerNode   // (node)       dom element of which the contents will be changed
                     //              will be defined when calling jazzer()
 */
-var links;
-var container;
-var transitionClass;
-var duration;
-var changeUrl;
-var linkNodes;
-var containerNode;
+var links, container, transitionClass, duration, changeUrl, linkNodes, containerNode;
 
 var jazzer = function jazzer() {
   var settings = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
