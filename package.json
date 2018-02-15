@@ -16,14 +16,15 @@
         "transition"
     ],
     "devDependencies": {
-        "@babel/core": "^7.0.0-beta.39",
-        "@babel/polyfill": "^7.0.0-beta.39",
-        "@babel/preset-env": "^7.0.0-beta.39",
+        "@babel/core": "^7.0.0-beta.40",
+        "@babel/polyfill": "^7.0.0-beta.40",
+        "@babel/preset-env": "^7.0.0-beta.40",
         "del": "^3.0.0",
-        "gulp": "^3.9.1",
-        "gulp-better-rollup": "^3.0.0",
+        "gulp": "^4.0.0",
         "rollup-plugin-babel": "^4.0.0-beta.1",
-        "run-sequence": "^2.2.1"
+        "rollup": "^0.56.0",
+        "rollup-stream": "^1.24.1",
+        "vinyl-source-stream": "^2.0.0"
     },
     "scripts": {
         "make": "gulp"
