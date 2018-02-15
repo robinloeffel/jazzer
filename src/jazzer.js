@@ -30,7 +30,7 @@ class Jazzer {
         const href = event.state ? event.state.path : event.currentTarget.href || location.href;
 
         const req = await fetch(href);
-        const res = await req.json();
+        const res = await req.text();
 
         console.log(res);
     }
