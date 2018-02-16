@@ -22,7 +22,7 @@
         "del": "^3.0.0",
         "gulp": "^4.0.0",
         "rollup": "^0.56.0",
-        "rollup-plugin-babel": "^4.0.0-beta.1",
+        "rollup-plugin-babel": "github:rollup/rollup-plugin-babel#fix/192",
         "rollup-plugin-commonjs": "^8.3.0",
         "rollup-plugin-node-resolve": "^3.0.3",
         "rollup-plugin-uglify": "^3.0.0",

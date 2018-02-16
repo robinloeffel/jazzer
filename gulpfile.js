@@ -41,7 +41,7 @@ gulp.task('make:iife', () => {
         },
         plugins: [
             rollupNodeResolve(),
-            rollupCommonJs(),
+            //rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
@@ -59,7 +59,7 @@ gulp.task('make:iife:min', () => {
         },
         plugins: [
             rollupNodeResolve(),
-            rollupCommonJs(),
+            //rollupCommonJs(),
             rollupBabel(config.babel),
             rollupUglify()
         ],
@@ -77,7 +77,7 @@ gulp.task('make:es', () => {
         },
         plugins: [
             rollupNodeResolve(),
-            rollupCommonJs(),
+            //rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
@@ -94,7 +94,7 @@ gulp.task('make:cjs', () => {
         },
         plugins: [
             rollupNodeResolve(),
-            rollupCommonJs(),
+            //rollupCommonJs(),
             rollupBabel(config.babel)
         ],
         rollup: rollup
