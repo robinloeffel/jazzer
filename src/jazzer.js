@@ -22,6 +22,8 @@ class Jazzer {
         [...this.nodes.triggers].forEach(trigger => {
             trigger.addEventListener('click', this.loadContent.bind(this));
         });
+
+        window.addEventListener('popstate', this.loadContent.bind(this));
     }
 
     loadContent(event) {
@@ -30,23 +32,29 @@ class Jazzer {
         const href = event.state ? event.state.path : event.currentTarget.href || location.href;
 
         fetch(href).then(req => req.text()).then(text => {
-            this.nodes.container.addEventListener('transitionend', this.updateDom.bind(this));
-            this.newDom = text;
-            this.nodes.container.classList.add(this.transition.class);
-        }).catch(error => {
-            console.error(`jazzer coulnd't get ${href}, the response was: ${error}`);
+            this.updatePage(text, href);
         });
     }
 
-    updateDom() {
-        let newDoc = document.implementation.createHTMLDocument('');
+    updatePage(dom, href) {
+        this.nodes.container.classList.add(this.transition.class);
 
-        newDoc.documentElement.innerHTML = this.newDom;
-        this.nodes.container.innerHTML = newDoc.querySelector(this.selectors.container).innerHTML;
-        this.newDom = '';
+        setTimeout(() => {
+            let newDoc = document.implementation.createHTMLDocument('');
 
-        this.nodes.container.removeEventListener('transitionend', this.updateDom.bind(this));
-        this.nodes.container.classList.remove(this.transition.class);
+            newDoc.documentElement.innerHTML = dom;
+            this.nodes.container.innerHTML = newDoc.querySelector(this.selectors.container).innerHTML;
+
+            if (this.url) {
+                document.title = newDoc.title;
+
+                history.pushState({
+                    path: href
+                }, newDoc.title, href);
+            }
+
+            this.nodes.container.classList.remove(this.transition.class);
+        }, this.transition.duration);
     }
 }
 

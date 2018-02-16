@@ -98,5 +98,6 @@ gulp.task('make:cjs', () => {
     .pipe(gulp.dest(config.paths.dist));
 });
 
-gulp.task('make', gulp.parallel('make:iife', 'make:iife:min', 'make:es', 'make:cjs'));
-gulp.task('default', gulp.series('clean', 'make'));
+gulp.task('make', gulp.series('make:iife', 'make:iife:min', 'make:es', 'make:cjs'));
+gulp.task('watch', () => gulp.watch(config.paths.index, gulp.series('make')));
+gulp.task('default', gulp.series('clean', 'make', 'watch'));
